@@ -14,7 +14,7 @@ function Home() {
             const res = await Api.get(endpoints['product'])
             setProduct(res.data)
         }
-        loadProduct()
+        loadProduct()  
     }, [])
  
     return (

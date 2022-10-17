@@ -46,16 +46,8 @@ const Header = () => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link href="#home">Trang Chủ</Nav.Link>
-                        <NavDropdown title="Thức ăn và Nước uống" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="/food">Thức ăn</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2"> Nước uống</NavDropdown.Item>
-
-                        </NavDropdown>
-                        <NavDropdown title="Sản phẩm và Dịch vụ" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">Sản phẩm</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2"> Dịch vụ </NavDropdown.Item>
-                        </NavDropdown>
+                        <Nav.Link href="/home">Trang Chủ</Nav.Link>
+                        <Nav.Link href="/products">Sản phẩm</Nav.Link>
                     </Nav>
                     <Form className="d-flex">
                         <FormControl

@@ -28,7 +28,7 @@ const Login = () => {
             });
             if (res.status === 200) {
                 cookies.save('access_token', res.data.access_token)
-    
+
                 // lay current user
                 const user = await authApi().get(endpoints['current-user'])
                 console.log(user.data)
@@ -114,7 +114,7 @@ const Login = () => {
                             }}
                         >
                             <p>Chưa có tài khoản?</p>
-                            <Link to="/register" style={{textDecoration: "none", fontWeight: "bold"}}>
+                            <Link to="/register" style={{ textDecoration: "none", fontWeight: "bold" }}>
                                 ĐĂNG KÝ
                             </Link>
                         </div>

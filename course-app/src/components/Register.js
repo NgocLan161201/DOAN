@@ -27,13 +27,23 @@ const Register = () => {
       formData.append("email", email);
       formData.append("avatar", avatar.current.files[0]);
 
-      let res = await Api.post(endpoints["register"], formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      navigate("/Login/");
+      try{
+        let res = await Api.post(endpoints["register"], formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        if (res.status === 201){
+          navigate("/");
+        }
+      }catch(e){
+        console.log(e.response)
+        if(e.response.status === 400) {
+          let errArray = [];
+          Object.values(e.response.data).forEach(e => e.forEach(m => errArray.push(m)));
+          setErr(errArray);
+        }
+      }
     };
 
     if (password !== confirmPassword) {
