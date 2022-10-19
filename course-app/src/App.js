@@ -10,6 +10,7 @@ import Products from './components/Products';
 import cookies from 'react-cookies';
 import Base from "./Base";
 import Register from './components/Register';
+import { CartProvider } from "./context/CartContext";
 
 export const UserContext = createContext();
 export const ListRouteContext = createContext();
@@ -19,16 +20,18 @@ function App() {
   return (
     <BrowserRouter>
       <UserContext.Provider value={[user, dispatch]}>
-        <Routes>
-          <Route path="/" element={<Base />}>
-            <Route index element={<Home />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/detail" element={<Detail />} />
-            <Route path="/cart" element={<Cart />} />
-          </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
+        <CartProvider>
+          <Routes>
+            <Route path="/" element={<Base />}>
+              <Route index element={<Home />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/detail" element={<Detail />} />
+              <Route path="/cart" element={<Cart />} />
+            </Route>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </CartProvider>
       </UserContext.Provider>
     </BrowserRouter>
   );

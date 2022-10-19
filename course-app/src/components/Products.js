@@ -3,6 +3,8 @@ import { Button, Card, Col, Row } from 'react-bootstrap';
 import Api, { endpoints } from '../configs/Api';
 import { BsFillCartFill } from 'react-icons/bs';
 
+import { CartContext } from './../context/CartContext';
+
 const Products = ({ setCart, cart }) => {
     const [product, setProduct] = useState([])
 
@@ -10,7 +12,6 @@ const Products = ({ setCart, cart }) => {
         const loadProduct = async () => {
             const res = await Api.get(endpoints['product'])
             setProduct(res.data)
-            console.log(res.data)
         }
         loadProduct()
     }, [])
@@ -51,7 +52,9 @@ const Products = ({ setCart, cart }) => {
                                     <Card.Text>{product.price} VND</Card.Text>
                                 </Card.Body>
                                 <Card.Footer style={{ background: "#fff" }}>
-                                    <Button variant="danger" style={{ width: "100%", bottom: "0" }} onClick={() => addToCart(product)}><BsFillCartFill /> Thêm vào giỏ hàng </Button>
+                                    <CartContext.Consumer>
+                                    { ({addToCart}) =>  <Button variant="danger" style={{ width: "100%", bottom: "0" }} onClick={() => addToCart(product)}><BsFillCartFill /> Thêm vào giỏ hàng </Button> }
+                                    </CartContext.Consumer>                                   
                                 </Card.Footer>
                             </Card>
                         </Col>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
+import { CartContext } from '../context/CartContext';
 
 const Cart = ({ cart, setCart }) => {
     const getTotalSum = () => {
@@ -49,7 +50,7 @@ const Cart = ({ cart, setCart }) => {
                             <tr key={idx}>
                                 <td>{product.image}</td>
                                 <td colSpan={3}>{product.name}</td>
-                                <td>{product.price}</td>
+                                <td>{product.price} VND</td>
                                 <td style={{ width: "150px" }}>
                                     <input
                                         value={product.quantity}

@@ -7,6 +7,7 @@ import { UserContext } from './../App';
 import cookies from 'react-cookies';
 // import { CartContext } from "../context/CartContext";
 import { BsCartFill } from "react-icons/bs";
+import { CartContext } from "../context/CartContext";
 
 const Header = () => {
     const [user, dispatch] = useContext(UserContext)
@@ -46,7 +47,7 @@ const Header = () => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link href="/home">Trang Chủ</Nav.Link>
+                        <Nav.Link href="/">Trang Chủ</Nav.Link>
                         <Nav.Link href="/products">Sản phẩm</Nav.Link>
                     </Nav>
                     <Form className="d-flex">
@@ -63,9 +64,12 @@ const Header = () => {
                         {btn}
                     </NavDropdown>
                 </Nav>
-                <Nav style={{ marginLeft: "20px" }}>
-                    <BsCartFill />
-                </Nav>
+                <CartContext.Consumer>
+                    {({ cartItem }) => <Nav style={{ marginLeft: "20px" }}>
+                        <Nav.Link href="/"><BsCartFill /> ({cartItem.length}) </Nav.Link>
+                    </Nav>}
+                </CartContext.Consumer>
+
             </div>
         </Navbar>
     )
