@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Form, FormControl, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -10,6 +10,7 @@ import { BsCartFill } from "react-icons/bs";
 import { CartContext } from "../context/CartContext";
 
 const Header = () => {
+    const [kw, setKw] = useState()
     const [user, dispatch] = useContext(UserContext)
     const logout = (evt) => {
         evt.preventDefault()
@@ -53,6 +54,8 @@ const Header = () => {
                     <Form className="d-flex">
                         <FormControl
                             type="search"
+                            name="kw" value={kw}
+                            onChange={evt => setKw(evt.target.value)}
                             placeholder="Search"
                             className="mr-10"
                             aria-label="Search" />

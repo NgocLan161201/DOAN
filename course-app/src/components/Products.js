@@ -4,9 +4,11 @@ import Api, { endpoints } from '../configs/Api';
 import { BsFillCartFill } from 'react-icons/bs';
 
 import { CartContext } from './../context/CartContext';
+import { useParams, useSearchParams } from "react-router-dom";
 
 const Products = ({ setCart, cart }) => {
     const [product, setProduct] = useState([])
+    const {productId} = useParams()
 
     useEffect(() => {
         const loadProduct = async () => {
@@ -43,12 +45,12 @@ const Products = ({ setCart, cart }) => {
                 padding: "24px",
             }}>
                 <Row md={4} xs={12} style={{ margin: "10px" }}>
-                    {product.map((product, idx) => (
+                    {product.map((product, productId) => (
                         <Col>
-                            <Card style={{ height: "400px" }}>
+                            <Card style={{ height: "400px", marginBottom: "20px" }}>
                                 <Card.Img variant="top" src={product.image} style={{ height: "200px" }} />
                                 <Card.Body>
-                                    <Card.Link style={{ fontSize: "24px", fontWeight: "bold", textDecoration: "none" }}>{product.name}</Card.Link>
+                                    <Card.Link href={`/product/${productId}/`} style={{ fontSize: "24px", fontWeight: "bold", textDecoration: "none" }}>{product.name}</Card.Link>
                                     <Card.Text>{product.price} VND</Card.Text>
                                 </Card.Body>
                                 <Card.Footer style={{ background: "#fff" }}>

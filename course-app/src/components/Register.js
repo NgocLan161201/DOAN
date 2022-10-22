@@ -15,6 +15,21 @@ const Register = () => {
   const navigate = useNavigate();
   const [err, setErr] = useState("");
 
+  const [newUser, setNewUser] = useState({
+    "first_name": "",
+    "last_name": "",
+    "username": "",
+    "password": "",
+    "email": ""
+  })
+
+  const change = (obj) => {
+    setNewUser({
+      ...newUser,
+      ...obj
+    })
+  }
+
   const register = (event) => {
     event.preventDefault();
 
@@ -27,18 +42,18 @@ const Register = () => {
       formData.append("email", email);
       formData.append("avatar", avatar.current.files[0]);
 
-      try{
-        let res = await Api.post(endpoints["register"], formData, {
+      try {
+        let res = await Api.post(endpoints["users"], formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-        if (res.status === 201){
+        if (res.status === 201) {
           navigate("/");
         }
-      }catch(e){
+      } catch (e) {
         console.log(e.response)
-        if(e.response.status === 400) {
+        if (e.response.status === 400) {
           let errArray = [];
           Object.values(e.response.data).forEach(e => e.forEach(m => errArray.push(m)));
           setErr(errArray);

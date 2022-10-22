@@ -129,6 +129,7 @@ function Home() {
                     </Carousel.Item>
                 </Carousel>
             </div>
+
             <div className=" text-text-dark text-center" style={{
                 margin: "10px auto",
                 borderRadius: "10px",
@@ -150,6 +151,7 @@ function Home() {
                     )}
                 </Row>
             </div>
+
             <div style={{
                 margin: "10px auto",
                 borderRadius: "10px",

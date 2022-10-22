@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { UserContext } from "../App";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import "../static/login.css";
-import Api, { authApi, endpoints } from "../configs/Api";
+import Api, { authAxios, endpoints } from "../configs/Api";
 import cookies from "react-cookies";
 
 const Login = () => {
@@ -13,37 +13,38 @@ const Login = () => {
     const [err, setErr] = useState("");
     const nav = useNavigate();
 
-    const login = async (evt) => {
-        evt.preventDefault();
-        try {
-            let info = await Api.get(endpoints["oauth2-info"]);
+    const login = async (event) => {
+        event.preventDefault()
 
-            let res = await Api.post(endpoints["login"], {
-                headers: "Access-Control-Allow-Origin: http://127.0.0.1:8000/",
-                client_id: info.data.client_id,
-                client_secret: info.data.client_secret,
-                username: username,
-                password: password,
-                grant_type: "password",
-            });
+        try {
+            const res = await Api.post(endpoints['login'], {
+                'client_id': '4SZzmOlZMf5uJ1Ym8DaHzJIdoiCjeFgUmI9ApmwN',
+                'client_secret': 'EnzhOjbt19JdlJaxLY4L5nMC6wcbHpQvqdeEXBxEBRw4cA6A8YVNKP9ATxOnWdKBLEAkxb2MhRbFo28xQvJu5qmMzt6due6MSrEtM2zlmxFp7huGWo3x4U7WFVdHJMqt',
+                'username': username,
+                'password': password,
+                'grant_type': 'password'
+            })
+    
+            
             if (res.status === 200) {
                 cookies.save('access_token', res.data.access_token)
-
+    
                 // lay current user
-                const user = await authApi().get(endpoints['current-user'])
+                const user = await authAxios().get(endpoints['current-user'])
                 console.log(user.data)
                 cookies.save('current_user', user.data)
                 dispatch({
                     "type": "login",
                     "payload": user.data
                 })
-            }
+            } 
         } catch (error) {
+            console.info(error)
             setErr("Sai tài khoản hoặc mật khẩu !!!!");
         }
-    };
-
-    if (user != null) return nav(-1);
+    }
+    if (user != null)
+        return <Navigate to="/" />
 
     return (
         <Container>

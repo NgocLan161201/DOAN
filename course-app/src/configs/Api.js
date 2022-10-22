@@ -8,20 +8,17 @@ export const endpoints = {
     'product-comments': (productId) => `/product/${productId}/comments/`,
     'comments': '/comments/',
     'users': '/users/',
-    "oauth2-info": "/oauth2-info/",
     "login": "/o/token/",
     "current-user": "/users/current-user/",
-    "register": "/users/",
 }
 
-export const authApi = () => {
-    return axios.create({
-        baseURL: "http://127.0.0.1:8000/",
-        headers: {
-            'Authorization': `Bearer ${cookies.load('token')}`
-        }
-    })
-}
+export const authAxios = () => axios.create({
+    baseURL: "http://127.0.0.1:8000/",
+    headers: {
+        'Authorization': `Bearer ${cookies.load('access_token')}`,
+        "Content-Type": "multipart/form-data",
+    }
+})
 
 export default axios.create({
     baseURL: "http://127.0.0.1:8000/"
