@@ -3,13 +3,17 @@ import cookies from 'react-cookies'
 
 export const endpoints = {
     'category': '/category',
-    'product': '/product/',
+    'product': '/product/',  
     'product-detail': (productId) => `/product/${productId}/`,
     'product-comments': (productId) => `/product/${productId}/comments/`,
+    'order': /order/,
+    'get-order': (orderId) => `/order/${orderId}/`,
+    'order-detail': '/order/order-detail/',
+    'get-order-detail': (orderId) => `/order/order-detail/${orderId}/`,
     'comments': '/comments/',
-    'users': '/users/',
+    'users': '/user/',
     "login": "/o/token/",
-    "current-user": "/users/current-user/",
+    "current-user": "/user/current-user/",
 }
 
 export const authAxios = () => axios.create({

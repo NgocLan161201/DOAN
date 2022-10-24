@@ -1,25 +1,36 @@
-import React, { useState, useEffect } from "react";
-import { Button, Card, Col, Row } from 'react-bootstrap';
+import React, { useState, useEffect, useContext } from "react";
+import { Button, Card, Col, Nav, Row } from 'react-bootstrap';
 import Api, { endpoints } from '../configs/Api';
-import { BsFillCartFill } from 'react-icons/bs';
-
-import { CartContext } from './../context/CartContext';
+import { BsFillCartFill, BsInputCursorText } from 'react-icons/bs';
 import { useParams, useSearchParams } from "react-router-dom";
 
-const Products = ({ setCart, cart }) => {
+const getItemFormLocalStorage = JSON.parse(localStorage.getItem("cart") || "[]"); 
+
+const Products = () => {
     const [product, setProduct] = useState([])
-    const {productId} = useParams()
+    const [cart, setCart] = useState(getItemFormLocalStorage)
+    const [q] = useSearchParams() 
 
     useEffect(() => {
         const loadProduct = async () => {
-            const res = await Api.get(endpoints['product'])
+            let query = ""
+            let cateId = q.get("category_id")
+
+            if (cateId !== null)
+                query = `category_id=${cateId}`
+
+            const kw = q.get("kw")
+            if (kw !== null)
+                query = `kw=${kw}`
+            
+            const res = await Api.get(`${endpoints['product']}?${query}`)
             setProduct(res.data)
         }
         loadProduct()
     }, [])
 
     const addToCart = (product) => {
-        let newCart = [...cart];   
+        let newCart = [...cart];
         let itemInCart = newCart.find(
             (item) => product.name === item.name
         );
@@ -33,30 +44,33 @@ const Products = ({ setCart, cart }) => {
             newCart.push(itemInCart);
         }
         setCart(newCart);
+        console.log(newCart)
     };
 
+    useEffect(() => {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }, [cart])
 
     return (
-        <>
+        <>            
             <div className=" text-text-dark text-center" style={{
                 margin: "10px auto",
                 borderRadius: "10px",
                 boxShadow: "4px 4px 20px 1px hsl(0deg 0% 55% / 40%)",
                 padding: "24px",
             }}>
+
                 <Row md={4} xs={12} style={{ margin: "10px" }}>
                     {product.map((product, productId) => (
                         <Col>
-                            <Card style={{ height: "400px", marginBottom: "20px" }}>
-                                <Card.Img variant="top" src={product.image} style={{ height: "200px" }} />
+                            <Card style={{ height: "500px", marginBottom: "20px" }}>
+                                <Card.Img variant="top" src={product.image} style={{ height: "300px", padding: "5px" }} />
                                 <Card.Body>
                                     <Card.Link href={`/product/${productId}/`} style={{ fontSize: "24px", fontWeight: "bold", textDecoration: "none" }}>{product.name}</Card.Link>
                                     <Card.Text>{product.price} VND</Card.Text>
                                 </Card.Body>
                                 <Card.Footer style={{ background: "#fff" }}>
-                                    <CartContext.Consumer>
-                                    { ({addToCart}) =>  <Button variant="danger" style={{ width: "100%", bottom: "0" }} onClick={() => addToCart(product)}><BsFillCartFill /> Thêm vào giỏ hàng </Button> }
-                                    </CartContext.Consumer>                                   
+                                    <Button variant="danger" style={{ width: "100%", bottom: "0" }} onClick={() => addToCart(product)}><BsFillCartFill /> Thêm vào giỏ hàng </Button>
                                 </Card.Footer>
                             </Card>
                         </Col>

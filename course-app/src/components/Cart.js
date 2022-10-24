@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
-import { CartContext } from '../context/CartContext';
+import { Link } from 'react-router-dom';
+import { UserContext } from '../App';
+import Api, { endpoints } from '../configs/Api';
 
-const Cart = ({ cart, setCart }) => {
+const getItemFormLocalStorage = JSON.parse(localStorage.getItem("cart") || "[]");
+
+const Cart = () => {
+    // const [product, setProduct] = useState([])
+    const [cart, setCart] = useState(getItemFormLocalStorage)
+    const [user, dispatch] = useContext(UserContext)
+
     const getTotalSum = () => {
         return cart.reduce(
             (sum, { price, quantity }) => sum + price * quantity,
             0
         );
     };
-    const clearCart = () => {
-        setCart([]);
-    };
+    
+    // const clearCart = () => {
+    //     setCart([]);
+    // };
 
     const setQuantity = (product, amount) => {
         const newCart = [...cart];
@@ -26,15 +35,28 @@ const Cart = ({ cart, setCart }) => {
             cart.filter((product) => product !== productToRemove)
         );
     };
+
+    useEffect(() => {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }, [cart])
+
+
+    // useEffect(() => {
+    //     const loadProduct = async () => {
+    //         const res = await Api.get(endpoints['product'])
+    //         setProduct(res.data)
+    //     }
+    //     loadProduct()
+    // }, [])
+
+
+
     return (
         <>
             <div style={{
                 margin: "20px auto",
                 width: "80%",
             }}>
-                {cart.length > 0 && (
-                    <button onClick={clearCart}>Clear Cart</button>
-                )}
                 <Table responsive="sm">
                     <thead>
                         <tr>
@@ -48,7 +70,9 @@ const Cart = ({ cart, setCart }) => {
                     <tbody>
                         {cart.map((product, idx) => (
                             <tr key={idx}>
-                                <td>{product.image}</td>
+                                <td>
+                                    <img className="active" src={product.image} style={{ maxWidth: "100%", height: "auto", objectFit: "cover", width: "60px" }} />
+                                </td>
                                 <td colSpan={3}>{product.name}</td>
                                 <td>{product.price} VND</td>
                                 <td style={{ width: "150px" }}>
@@ -62,9 +86,9 @@ const Cart = ({ cart, setCart }) => {
                                         }
                                     />
                                 </td>
-                                <td>{product.price*product.quantity}</td>
+                                <td>{product.price * product.quantity} VND</td>
                                 <td style={{ width: "50px" }}>
-                                    <button onClick={() => removeFromCart(product)}>
+                                    <button onClick={() => removeFromCart(product)} >
                                         Remove
                                     </button>
                                 </td>
@@ -75,20 +99,55 @@ const Cart = ({ cart, setCart }) => {
                 <div style={{
                     textAlign: "right"
                 }}>
-                    <p>Total: {getTotalSum()} VND</p>
-                    <button style={{
-                        background: "#3e3e3f",
-                        color: "#fff",
-                        boder: "none",
-                        padding: "1rem 1.5rem",
-                        fontSize: "1rem",
-                        textTransform: 'uppercase',
-                        cursor: "pointer",
-                        letterSpacing: "0.0625rem",
+                    {user == null ?
+                        <>
+                            <p style={{
+                                color: "red",
+                                padding: "1rem 0",
+                                fontSize: "1rem",
+                                letterSpacing: "0.0625rem",
+                                textDecoration: "none",
 
-                    }} >THANH TOÁN</button>
+                            }} >Đăng nhập vào tài khoản trước khi đặt hàng !</p>
+                            <Link to="/login" style={{
+                                background: "#3e3e3f",
+                                color: "#fff",
+                                boder: "none",
+                                padding: "1rem 1.5rem",
+                                fontSize: "1rem",
+                                textTransform: 'uppercase',
+                                cursor: "pointer",
+                                letterSpacing: "0.0625rem",
+                                textDecoration: "none",
+
+                            }}> ĐĂNG NHẬP</Link>
+                        </> :
+                        cart.length < 1 ? (<p style={{
+                            color: "red",
+                            padding: "1rem 0",
+                            fontSize: "1rem",
+                            letterSpacing: "0.0625rem",
+                            textDecoration: "none",
+
+                        }} >Bạn không có sản phẩm nào cần thanh toán</p>) :
+                            <>
+                                <p>Thành tiền: {getTotalSum()} VND</p>
+                                <Link to="/payment" style={{
+                                    background: "#3e3e3f",
+                                    color: "#fff",
+                                    boder: "none",
+                                    padding: "1rem 1.5rem",
+                                    fontSize: "1rem",
+                                    textTransform: 'uppercase',
+                                    cursor: "pointer",
+                                    letterSpacing: "0.0625rem",
+                                    textDecoration: "none",
+
+                                }} >ĐẶT HÀNG</Link>                               
+                            </>
+                    }
                 </div>
-            </div>
+            </div >
         </>
     );
 };

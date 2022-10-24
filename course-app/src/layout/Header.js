@@ -1,26 +1,42 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Form, FormControl, Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaUserAlt } from "react-icons/fa";
 import { UserContext } from './../App';
 import cookies from 'react-cookies';
-// import { CartContext } from "../context/CartContext";
 import { BsCartFill } from "react-icons/bs";
-import { CartContext } from "../context/CartContext";
+import Api, { endpoints } from "../configs/Api";
 
+const getItemFormLocalStorage = JSON.parse(localStorage.getItem("cart") || "[]");
 const Header = () => {
     const [kw, setKw] = useState()
+    const [categories, setCategories] = useState([])
+    const [cart, setCart] = useState(getItemFormLocalStorage)
     const [user, dispatch] = useContext(UserContext)
+
     const logout = (evt) => {
         evt.preventDefault()
-        cookies.remove('token')
-        cookies.remove('user')
+        cookies.remove('access_token')
+        cookies.remove('current_user')
         dispatch({ "type": "logout" })
     }
-    // const { cart } = useContext(CartContext);
+    useEffect(() => {
+        const loadCategories = async () => {
+            let res = await Api.get(endpoints['category'])
+            setCategories(res.data)
+        }
 
-    // let cookie = cookies.load('user')
+        loadCategories()
+    }, [])
+
+    const getCartTotal = () => {
+        return cart.reduce(
+            (sum, { quantity }) => sum + quantity,
+            0
+        );
+    }
+
 
     let btn = (
         <NavDropdown.Item href="/login">Đăng Nhập</NavDropdown.Item>
@@ -32,12 +48,6 @@ const Header = () => {
                     <img src={user.avatar} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: "0 10px" }} />
                     {user.username}
                 </NavDropdown.Item>
-                <div className="nav-link text-danger Nav-Hover" style={{ width: "auto" }}>
-                    {/* <img src={cookie.avatar_path} style={{width:"40px", height:"40px", borderRadius: "50%", margin:"0 10px"}}/>
-        {cookie.username} */}
-                    <img src={user.avatar} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: "0 10px" }} />
-                    {user.username}
-                </div>
                 <NavDropdown.Item href="javascript:;" onClick={logout}>Đăng Xuất</NavDropdown.Item>
             </>
         );
@@ -49,7 +59,13 @@ const Header = () => {
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link href="/">Trang Chủ</Nav.Link>
-                        <Nav.Link href="/products">Sản phẩm</Nav.Link>
+                        <NavDropdown title="Sản phẩm">
+                            {categories.map((c) => {
+                                const url = `/products/?category_id=${c.id}`
+                                return <NavDropdown.Item href={url} >{c.name}</NavDropdown.Item>
+                            })}
+
+                        </NavDropdown>
                     </Nav>
                     <Form className="d-flex">
                         <FormControl
@@ -67,15 +83,13 @@ const Header = () => {
                         {btn}
                     </NavDropdown>
                 </Nav>
-                <CartContext.Consumer>
-                    {({ cartItem }) => <Nav style={{ marginLeft: "20px" }}>
-                        <Nav.Link href="/"><BsCartFill /> ({cartItem.length}) </Nav.Link>
-                    </Nav>}
-                </CartContext.Consumer>
-
+                <Nav style={{ marginLeft: "20px" }}>
+                    <Nav.Link href="/cart"><BsCartFill /> ({getCartTotal()}) </Nav.Link>
+                </Nav>
             </div>
         </Navbar>
     )
 }
 
 export default Header
+
