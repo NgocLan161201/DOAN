@@ -48,9 +48,9 @@ const Products = () => {
         console.log(newCart)
     };
 
-    // useEffect(() => {
-    //     localStorage.setItem("cart", JSON.stringify(cart));
-    // }, [cart])
+    useEffect(() => {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }, [cart])
 
     function Items({ currentItems }) {
         return (

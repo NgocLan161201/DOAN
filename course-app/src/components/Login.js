@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { UserContext } from "../App";
 import { Link, Navigate, useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ const Login = () => {
     const [password, setPassword] = useState();
     const [user, dispatch] = useContext(UserContext);
     const [err, setErr] = useState("");
-    const Navigate = useNavigate();
+    const nav = useNavigate();
 
     const login = async (event) => {
         event.preventDefault()
@@ -24,11 +24,11 @@ const Login = () => {
                 'password': password,
                 'grant_type': 'password'
             })
-    
-            
+
+
             if (res.status === 200) {
                 cookies.save('access_token', res.data.access_token)
-    
+
                 // lay current user
                 const user = await authAxios().get(endpoints['current-user'])
                 console.log(user.data)
@@ -37,14 +37,16 @@ const Login = () => {
                     "type": "login",
                     "payload": user.data
                 })
-            } 
+            }
         } catch (error) {
             console.info(error)
             setErr("Sai tài khoản hoặc mật khẩu !!!!");
         }
     }
+
     if (user != null)
         return <Navigate to="/" />
+
 
     return (
         <Container>

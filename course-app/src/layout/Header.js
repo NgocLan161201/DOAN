@@ -13,7 +13,6 @@ const getItemFormLocalStorage = JSON.parse(localStorage.getItem("cart") || "[]")
 const Header = () => {
     const [kw, setKw] = useState()
     const [categories, setCategories] = useState([])
-    const [cart, setCart] = useState(getItemFormLocalStorage)
     const [user, dispatch] = useContext(UserContext)
 
     const logout = (evt) => {
@@ -56,7 +55,7 @@ const Header = () => {
                     <img src={user.avatar} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: "0 10px" }} />
                     {user.username}
                 </NavDropdown.Item>
-                <NavDropdown.Item href="javascript:;" onClick={logout}>Đăng Xuất</NavDropdown.Item>
+                <NavDropdown.Item href="javascript:;" onClick={logout} >Đăng Xuất</NavDropdown.Item>
             </>
         );
     return (
