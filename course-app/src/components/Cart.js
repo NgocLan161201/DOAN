@@ -2,12 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../App';
-import Api, { endpoints } from '../configs/Api';
 
 const getItemFormLocalStorage = JSON.parse(localStorage.getItem("cart") || "[]");
 
 const Cart = () => {
-    // const [product, setProduct] = useState([])
     const [cart, setCart] = useState(getItemFormLocalStorage)
     const [user, dispatch] = useContext(UserContext)
 
@@ -17,10 +15,10 @@ const Cart = () => {
             0
         );
     };
-    
-    // const clearCart = () => {
-    //     setCart([]);
-    // };
+
+    const clearCart = () => {
+        setCart([]);
+    };
 
     const setQuantity = (product, amount) => {
         const newCart = [...cart];
@@ -43,10 +41,14 @@ const Cart = () => {
 
     return (
         <>
+
             <div style={{
                 margin: "20px auto",
                 width: "80%",
             }}>
+                {cart.length > 0 && (
+                    <button onClick={clearCart}>Clear Cart</button>
+                )}
                 <Table responsive="sm">
                     <thead>
                         <tr>
@@ -133,7 +135,7 @@ const Cart = () => {
                                     letterSpacing: "0.0625rem",
                                     textDecoration: "none",
 
-                                }} >ĐẶT HÀNG</Link>                               
+                                }} >ĐẶT HÀNG</Link>
                             </>
                     }
                 </div>

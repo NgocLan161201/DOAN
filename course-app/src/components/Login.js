@@ -11,7 +11,7 @@ const Login = () => {
     const [password, setPassword] = useState();
     const [user, dispatch] = useContext(UserContext);
     const [err, setErr] = useState("");
-    const nav = useNavigate();
+    const Navigate = useNavigate();
 
     const login = async (event) => {
         event.preventDefault()

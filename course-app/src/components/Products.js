@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Button, Card, Col, Nav, Row } from 'react-bootstrap';
+import React, { useState, useEffect} from "react";
+import { Button, Card, Col, Row } from 'react-bootstrap';
 import Api, { endpoints } from '../configs/Api';
-import { BsFillCartFill, BsInputCursorText } from 'react-icons/bs';
-import { useParams, useSearchParams } from "react-router-dom";
+import { BsFillCartFill} from 'react-icons/bs';
+import {useSearchParams } from "react-router-dom";
 
 const getItemFormLocalStorage = JSON.parse(localStorage.getItem("cart") || "[]"); 
 
@@ -44,7 +44,6 @@ const Products = () => {
             newCart.push(itemInCart);
         }
         setCart(newCart);
-        console.log(newCart)
     };
 
     useEffect(() => {
@@ -53,6 +52,7 @@ const Products = () => {
 
     return (
         <>            
+            <p>Số lượng item: {cart.length} </p>
             <div className=" text-text-dark text-center" style={{
                 margin: "10px auto",
                 borderRadius: "10px",
