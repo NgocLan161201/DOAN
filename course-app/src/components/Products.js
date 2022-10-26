@@ -45,7 +45,6 @@ const Products = () => {
             newCart.push(itemInCart);
         }
         setCart(newCart);
-        localStorage.setItem("cart", JSON.stringify(newCart));
         console.log(newCart)
     };
 
@@ -55,7 +54,7 @@ const Products = () => {
 
     function Items({ currentItems }) {
         return (
-            <>            
+            <>
                 <div className=" text-text-dark text-center" style={{
                     margin: "10px auto",
                     borderRadius: "10px",
