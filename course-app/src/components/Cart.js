@@ -41,16 +41,6 @@ const Cart = () => {
     }, [cart])
 
 
-    // useEffect(() => {
-    //     const loadProduct = async () => {
-    //         const res = await Api.get(endpoints['product'])
-    //         setProduct(res.data)
-    //     }
-    //     loadProduct()
-    // }, [])
-
-
-
     return (
         <>
             <div style={{

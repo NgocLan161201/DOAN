@@ -9,12 +9,8 @@ const Payment = (prop) => {
     const [cart, setCart] = useState(getItemFormLocalStorage)
     const [addressState, setaddressState] = useState()
     const [phoneState, setPhoneState] = useState()
-    const [orderState, setOrderState] = useState([])
 
     const [user, dispatch] = useContext(UserContext)
-
-    const { userId } = useParams()
-
 
     const getTotalSum = () => {
         return cart.reduce(
@@ -23,25 +19,40 @@ const Payment = (prop) => {
         );
     };
 
-    let total = getTotalSum();
-    useEffect(() => {
+    const removeFromCart = (productToRemove) => {
+        setCart(
+            cart.filter((product) => product !== productToRemove)
+        );
+    };
 
-    })
+    let total = getTotalSum();
+
     const pay = async () => {
-        const resOrderState = await Api.post(endpoints['order'], {
+        let resOrderState = await Api.post(endpoints['order'], {
             phone: phoneState,
             address: addressState,
             amount: total,
             user: user.id,
         });
-        setOrderState(resOrderState.data)
-        alert("Dien thong tin thanh cong")
+        let orderID = resOrderState.data.id
+
+        cart.map(async (product) => {
+            const res = await Api.post(endpoints["order-details"], {
+                order: orderID,
+                product: product.id,
+                unit_price: product.price,
+                numb: product.quantity,
+            });
+            let orderDetailId = res.data.id
+            console.log(orderDetailId)
+            alert("thanh cong")
+        })
     }
 
 
     return (
         <>
-            
+
             <div style={{
                 margin: "10px auto",
                 width: "80%",
@@ -51,22 +62,19 @@ const Payment = (prop) => {
             }}>
                 <div style={{ margin: "20px auto" }}>
                     <div style={{ textAlign: "left" }}>
-                        {user != null ?
-                            <>
-                                <h3 style={{ fontWeight: "bold" }}> ĐƠN HÀNG CỦA BẠN </h3>
-                                <p> Họ và tên người nhận:<strong>  {user.first_name} {user.last_name}  </strong> </p>
-                                <p> Số điện thoại người nhận:  <strong> {phoneState} </strong> </p>
-                                <p> Địa chỉ người nhận:  <strong> {addressState} </strong>  </p>
-                                <hr />
-                                <p style={{
-                                    color: "#3e3e3f",
-                                    fontSize: "1rem",
-                                    letterSpacing: "0.0625rem",
-                                    textDecoration: "none",
-                                }}> THAY ĐỔI THÔNG TIN NHẬN HÀNG :</p>
-                            </>
-                            : <td></td>
-                        }
+                        <>
+                            <h3 style={{ fontWeight: "bold" }}> ĐƠN HÀNG CỦA BẠN </h3>
+                            <p> Họ và tên người nhận:<strong>  {user.first_name} {user.last_name}  </strong> </p>
+                            <p> Số điện thoại người nhận:  <strong> {phoneState} </strong> </p>
+                            <p> Địa chỉ người nhận:  <strong> {addressState} </strong>  </p>
+                            <hr />
+                            <p style={{
+                                color: "#3e3e3f",
+                                fontSize: "1rem",
+                                letterSpacing: "0.0625rem",
+                                textDecoration: "none",
+                            }}> THAY ĐỔI THÔNG TIN NHẬN HÀNG :</p>
+                        </>
                     </div>
                 </div>
 

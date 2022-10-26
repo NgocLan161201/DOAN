@@ -42,23 +42,11 @@ function Detail() {
             newCart.push(itemInCart);
         }
         setCart(newCart);
-        console.log(newCart)
     };
 
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(cart));
     }, [cart])
-
-    // const setQuantity = (product, amount) => {
-    //     const newCart = [...cart];
-    //     newCart.find(
-    //         (item) => item.name === product.name
-    //     ).quantity = amount;
-    //     setCart(newCart);
-    // };
-
-    // const increase = () => setCount(count + 1);
-	// const decrease = () => setCount(count - 1);
     
     return (
         <Container>
