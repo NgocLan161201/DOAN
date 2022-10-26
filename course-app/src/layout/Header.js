@@ -52,7 +52,7 @@ const Header = () => {
     if (user != null)
         btn = (
             <>
-                <NavDropdown.Item href="http://127.0.0.1:8000/admin/">
+                <NavDropdown.Item href="javascript:;">
                     <img src={user.avatar} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: "0 10px" }} />
                     {user.username}
                 </NavDropdown.Item>
