@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Button, Card, Col, Nav, Row } from 'react-bootstrap';
 import Api, { endpoints } from '../configs/Api';
+import { Pagination } from "react-bootstrap";
 import { BsFillCartFill, BsInputCursorText } from 'react-icons/bs';
 import { useParams, useSearchParams } from "react-router-dom";
 
@@ -44,40 +45,85 @@ const Products = () => {
             newCart.push(itemInCart);
         }
         setCart(newCart);
+        localStorage.setItem("cart", JSON.stringify(newCart));
         console.log(newCart)
     };
 
-    useEffect(() => {
-        localStorage.setItem("cart", JSON.stringify(cart));
-    }, [cart])
+    // useEffect(() => {
+    //     localStorage.setItem("cart", JSON.stringify(cart));
+    // }, [cart])
 
-    return (
-        <>            
-            <div className=" text-text-dark text-center" style={{
-                margin: "10px auto",
-                borderRadius: "10px",
-                boxShadow: "4px 4px 20px 1px hsl(0deg 0% 55% / 40%)",
-                padding: "24px",
-            }}>
+    function Items({ currentItems }) {
+        return (
+            <>            
+                <div className=" text-text-dark text-center" style={{
+                    margin: "10px auto",
+                    borderRadius: "10px",
+                    boxShadow: "4px 4px 20px 1px hsl(0deg 0% 55% / 40%)",
+                    padding: "24px",
+                }}>
 
-                <Row md={4} xs={12} style={{ margin: "10px" }}>
-                    {product.map((product, productId) => (
-                        <Col>
-                            <Card style={{ height: "500px", marginBottom: "20px" }}>
-                                <Card.Img variant="top" src={product.image} style={{ height: "300px", padding: "5px" }} />
-                                <Card.Body>
-                                    <Card.Link href={`/product/${productId}/`} style={{ fontSize: "24px", fontWeight: "bold", textDecoration: "none" }}>{product.name}</Card.Link>
-                                    <Card.Text>{product.price} VND</Card.Text>
-                                </Card.Body>
-                                <Card.Footer style={{ background: "#fff" }}>
-                                    <Button variant="danger" style={{ width: "100%", bottom: "0" }} onClick={() => addToCart(product)}><BsFillCartFill /> Thêm vào giỏ hàng </Button>
-                                </Card.Footer>
-                            </Card>
-                        </Col>
-                    ))}
-                </Row>
-            </div>
-        </>
-    )
+                    <Row md={4} xs={12} style={{ margin: "10px" }}>
+                        {currentItems && currentItems.map((item) => (
+                            <Col>
+                                <Card style={{ height: "500px", marginBottom: "20px" }}>
+                                    <Card.Img variant="top" src={item.image} style={{ height: "300px", padding: "5px" }} />
+                                    <Card.Body>
+                                        <Card.Link href={`/product/${item.id}/`} style={{ fontSize: "24px", fontWeight: "bold", textDecoration: "none" }}>{item.name}</Card.Link>
+                                        <Card.Text>{item.price} VND</Card.Text>
+                                    </Card.Body>
+                                    <Card.Footer style={{ background: "#fff" }}>
+                                        <Button variant="danger" style={{ width: "100%", bottom: "0" }} onClick={() => addToCart(item)}><BsFillCartFill /> Thêm vào giỏ hàng </Button>
+                                    </Card.Footer>
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
+                </div>
+            </>
+       )
+    }
+    function Paginate(props) {
+        const page = []
+
+        for (var i = 0; i < props.pageCount; i++) {
+            page.push(i)
+        }
+        return (
+            <Pagination style={{ marginTop: "10px", margin: "auto" }}>
+                <Pagination.First onClick={() => props.onPageChange(0)} />
+                {page.map(p => (
+                    <Pagination.Item onClick={() => props.onPageChange(p)}>{p + 1}</Pagination.Item>
+                ))}
+                <Pagination.Last onClick={() => props.onPageChange(props.pageCount - 1)} />
+            </Pagination>
+        )
+    }
+
+    function PaginatedItems({ itemsPerPage }) {
+        const [currentItems, setCurrentItems] = useState(null);
+        const [pageCount, setPageCount] = useState(0);
+        const [itemOffset, setItemOffset] = useState(0);
+
+        useEffect(() => {
+            const endOffset = itemOffset + itemsPerPage;
+            setCurrentItems(product.slice(itemOffset, endOffset));
+            setPageCount(Math.ceil(product.length / itemsPerPage));
+        }, [itemOffset, itemsPerPage]);
+
+        const handlePageClick = (value) => {
+            const newOffset = value * itemsPerPage % product.length;
+            setItemOffset(newOffset);
+        };
+        return (
+            <>
+                <Items currentItems={currentItems} />
+                {product.length > itemsPerPage ?
+                    <Paginate pageCount={pageCount} onPageChange={handlePageClick} pageRangeDisplayed={5} itemOffset={itemOffset} />
+                    : ''}
+            </>
+        )
+    }
+    return <PaginatedItems itemsPerPage={8}/>
 }
 export default Products;

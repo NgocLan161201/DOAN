@@ -18,8 +18,8 @@ const Login = () => {
 
         try {
             const res = await Api.post(endpoints['login'], {
-                'client_id': '4SZzmOlZMf5uJ1Ym8DaHzJIdoiCjeFgUmI9ApmwN',
-                'client_secret': 'EnzhOjbt19JdlJaxLY4L5nMC6wcbHpQvqdeEXBxEBRw4cA6A8YVNKP9ATxOnWdKBLEAkxb2MhRbFo28xQvJu5qmMzt6due6MSrEtM2zlmxFp7huGWo3x4U7WFVdHJMqt',
+                'client_id': '87ZFSvZJFeasTHAbfTjB6gy2cOXcQnu8hXTIgCLG',
+                'client_secret': 'o03TnXDOJjfNWIbQiD5P2ciQlQiYaKzm4mrtNCZulvuQdqxbdHd6VaOtdXlRnkIDrNtZVGVoc0kbTMfkmtpQEzaLD8v022o9IPy52TliC9YrSqASkhX7J1E3fIZKBwWS',
                 'username': username,
                 'password': password,
                 'grant_type': 'password'

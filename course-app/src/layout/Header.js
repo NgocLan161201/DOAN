@@ -9,6 +9,7 @@ import { BsCartFill } from "react-icons/bs";
 import Api, { endpoints } from "../configs/Api";
 
 const getItemFormLocalStorage = JSON.parse(localStorage.getItem("cart") || "[]");
+
 const Header = () => {
     const [kw, setKw] = useState()
     const [categories, setCategories] = useState([])
@@ -21,6 +22,7 @@ const Header = () => {
         cookies.remove('current_user')
         dispatch({ "type": "logout" })
     }
+
     useEffect(() => {
         const loadCategories = async () => {
             let res = await Api.get(endpoints['category'])
@@ -31,11 +33,17 @@ const Header = () => {
     }, [])
 
     const getCartTotal = () => {
-        return cart.reduce(
+        return getItemFormLocalStorage.reduce(
             (sum, { quantity }) => sum + quantity,
             0
         );
     }
+
+    console.log("getItemFormLocalStorage", getItemFormLocalStorage)
+    useEffect (() => {
+        getCartTotal();
+        console.log('aaa')
+    },[getItemFormLocalStorage])
 
 
     let btn = (
@@ -44,7 +52,7 @@ const Header = () => {
     if (user != null)
         btn = (
             <>
-                <NavDropdown.Item href="javascript:;">
+                <NavDropdown.Item href="http://127.0.0.1:8000/admin/">
                     <img src={user.avatar} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: "0 10px" }} />
                     {user.username}
                 </NavDropdown.Item>
