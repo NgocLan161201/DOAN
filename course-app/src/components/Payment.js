@@ -137,8 +137,6 @@ const Payment = () => {
                         padding: "1rem 0",
                         fontSize: "1rem",
                         letterSpacing: "0.0625rem",
-                        textDecoration: "none",
-
                     }} >THANH TOÁN THÀNH CÔNG !</p>
                     <p>Trở về
                         <strong>

@@ -1,26 +1,27 @@
 import "../static/details.css";
 import React, { useContext, useEffect, useState } from "react";
-import { Col, Row, Container, Card, Button } from 'react-bootstrap';
+import { Col, Row, Container, Card, Button, Form } from 'react-bootstrap';
 import { BsFillCartFill } from 'react-icons/bs';
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../App";
 import Api, { endpoints, authAxios } from '../configs/Api'
 
-const getItemFormLocalStorage = JSON.parse(localStorage.getItem("cart") || "[]"); 
+const getItemFormLocalStorage = JSON.parse(localStorage.getItem("cart") || "[]");
 
 
 function Detail() {
     const [product, setProduct] = useState([])
-    const [comments, setComments] = useState([])
-    const [count, setCount] = useState();
     const [cart, setCart] = useState(getItemFormLocalStorage)
     const { productId } = useParams()
-    const [user] = useContext(UserContext)
+
+    const [comments, setComments] = useState([])
+    const [content, setContent] = useState()
+    const [user, dispatch] = useContext(UserContext)
+    const nav = useNavigate()
 
     useEffect(() => {
         const loadProduct = async () => {
-            const res = await Api.get(endpoints['product-detail'](productId))           
-            console.info(res.data)
+            const res = await Api.get(endpoints['product-detail'](productId))
             setProduct(res.data)
         }
 
@@ -47,7 +48,28 @@ function Detail() {
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(cart));
     }, [cart])
-    
+
+    useEffect(() => {
+        const loadComments = async () => {
+            const res = await Api.get(endpoints['product-comments'](productId))
+            setComments(res.data)
+        }
+        loadComments()
+    }, [productId])
+
+    const addComment = async (evt) => {
+        evt.preventDefault()
+
+        const resComment = await Api.post(endpoints['comments'], {
+            content: content,
+            product: productId,
+            user: user.id,
+        });
+        setComments([...comments, resComment.data]);
+        
+        console.info(resComment.data)
+    }
+
     return (
         <Container>
             <div className="grid product d-flex">
@@ -71,6 +93,57 @@ function Detail() {
                     <button className="add-to-cart" onClick={() => addToCart(product)} >Thêm vào giỏ hàng</button>
                 </div>
             </div><hr />
+
+            <div style={{
+                margin: "10px auto",
+                borderRadius: "10px",
+                boxShadow: "4px 4px 20px 1px hsl(0deg 0% 55% / 40%)",
+                padding: "24px",
+            }}>
+                <p style={{
+                    color: "#3e3e3f",
+                    padding: "1rem 0",
+                    fontSize: "1rem",
+                    letterSpacing: "0.0625rem",
+                }}>ĐÁNH GIÁ SẢN PHẨM: </p>
+
+                {content == null ?
+                    (
+                        <p style={{
+                            color: "#3e3e3f",
+                            padding: "1rem 0",
+                            fontSize: "1rem",
+                            letterSpacing: "0.0625rem",
+                        }}> Vui lòng nhập đánh giá về sản phẩm! </p>
+                    )
+                    :
+                    (" ")
+                }
+
+                <Form.Group style={{ borderRadius: "10px", marginBottom: "24px" }}>
+                    <Form.Label style={{
+                        color: "#3e3e3f",
+                        fontSize: "1rem",
+                        letterSpacing: "0.0625rem",
+                        textDecoration: "none",
+                    }}>Nhập đánh giá của bạn:</Form.Label>
+                    <Form.Control as="textarea" rows={3} value={content} onChange = {(evt) => setContent(evt.target.value)} />
+                    <Button type="submit" style={{
+                        background: "#3e3e3f",
+                        color: "#fff",
+                        boder: "none",
+                        padding: "0.5rem 1rem",
+                        fontSize: "1rem",
+                        textTransform: 'uppercase',
+                        cursor: "pointer",
+                        letterSpacing: "0.0625rem",
+                    }}
+                        onClick={addComment}
+                    >
+                        Gửi
+                    </Button>
+                </Form.Group>
+            </div>
         </Container >
     )
 }

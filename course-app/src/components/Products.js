@@ -45,7 +45,6 @@ const Products = () => {
             newCart.push(itemInCart);
         }
         setCart(newCart);
-        console.log(newCart)
     };
 
     useEffect(() => {

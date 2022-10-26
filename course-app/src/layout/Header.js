@@ -61,7 +61,7 @@ const Header = () => {
     return (
         <Navbar collapseOnSelect expand="lg" style={{ backgroundColor: "#E0FFFF", color: "#000" }}>
             <div className="container">
-                <Link to="/" className="navbar-brand" style={{ fontSize: "30px", fontWeight: "bold" }}>eSocial-Mart </Link>
+                <Link to="#" className="navbar-brand" style={{ fontSize: "30px", fontWeight: "bold" }}>eSocial-Mart </Link>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
