@@ -141,17 +141,6 @@ const Register = () => {
                   </Form.Group>
                 </Col>
               </Row>
-              <Form.Group className="mb-3" controlId="formBasicText">
-                <Form.Label>Tài khoản</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder=""
-                  value={username}
-                  onChange={(event) => setUsername(event.target.value)}
-                  style={{ borderRadius: "20px" }}
-                  required
-                />
-              </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
@@ -159,6 +148,17 @@ const Register = () => {
                   placeholder=""
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
+                  style={{ borderRadius: "20px" }}
+                  required
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicText">
+                <Form.Label>Tài khoản</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder=""
+                  value={username}
+                  onChange={(event) => setUsername(event.target.value)}
                   style={{ borderRadius: "20px" }}
                   required
                 />

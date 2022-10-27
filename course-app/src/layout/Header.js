@@ -38,10 +38,8 @@ const Header = () => {
         );
     }
 
-    console.log("getItemFormLocalStorage", getItemFormLocalStorage)
     useEffect (() => {
         getCartTotal();
-        console.log('aaa')
     },[getItemFormLocalStorage])
 
 
@@ -52,7 +50,7 @@ const Header = () => {
         btn = (
             <>
                 <NavDropdown.Item href="javascript:;">
-                    <img src={user.avatar} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: "0 10px" }} />
+                    <img className="review-avatar lazyloaded" src={user.avatar_path} alt="avatar" style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
                     {user.username}
                 </NavDropdown.Item>
                 <NavDropdown.Item href="javascript:;" onClick={logout} >Đăng Xuất</NavDropdown.Item>

@@ -1,8 +1,9 @@
 import "../static/details.css";
+import "../static/comment.css";
 import React, { useContext, useEffect, useState } from "react";
-import { Col, Row, Container, Card, Button, Form } from 'react-bootstrap';
-import { BsFillCartFill } from 'react-icons/bs';
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Container, Button, Form } from 'react-bootstrap';
+import { useNavigate, useParams } from "react-router-dom";
+import { GoVerified } from "react-icons/go";
 import { UserContext } from "../App";
 import Api, { endpoints, authAxios } from '../configs/Api'
 
@@ -66,8 +67,6 @@ function Detail() {
             user: user.id,
         });
         setComments([...comments, resComment.data]);
-        
-        console.info(resComment.data)
     }
 
     return (
@@ -111,7 +110,6 @@ function Detail() {
                     (
                         <p style={{
                             color: "#3e3e3f",
-                            padding: "1rem 0",
                             fontSize: "1rem",
                             letterSpacing: "0.0625rem",
                         }}> Vui lòng nhập đánh giá về sản phẩm! </p>
@@ -127,22 +125,47 @@ function Detail() {
                         letterSpacing: "0.0625rem",
                         textDecoration: "none",
                     }}>Nhập đánh giá của bạn:</Form.Label>
-                    <Form.Control as="textarea" rows={3} value={content} onChange = {(evt) => setContent(evt.target.value)} />
-                    <Button type="submit" style={{
-                        background: "#3e3e3f",
-                        color: "#fff",
-                        boder: "none",
-                        padding: "0.5rem 1rem",
-                        fontSize: "1rem",
-                        textTransform: 'uppercase',
-                        cursor: "pointer",
-                        letterSpacing: "0.0625rem",
-                    }}
-                        onClick={addComment}
-                    >
-                        Gửi
-                    </Button>
+                    <Form.Control as="textarea" rows={3} value={content} onChange={(evt) => setContent(evt.target.value)} />
                 </Form.Group>
+                <Button type="submit" style={{
+                    background: "#3e3e3f",
+                    color: "#fff",
+                    boder: "none",
+                    padding: "0.5rem 1rem",
+                    fontSize: "1rem",
+                    textTransform: 'uppercase',
+                    cursor: "pointer",
+                    letterSpacing: "0.0625rem",
+                }}
+                    onClick={addComment}
+                >
+                    Gửi
+                </Button>
+
+                {/* Hiện comment */}
+
+                {comments.map(c => 
+                    (
+                        <div className="items">
+                            <div className="ixChPW review-item-container ">
+                                <div className="review-item">
+                                    <div className="review-section header">
+                                        <img className="review-avatar lazyloaded" src={c.user.avatar_path} alt="review-avatar" width="40" height="40" />
+                                        <div className="review-title">
+                                            <p className="gbHaVL name color--darkness"> {c.user.first_name} {c.user.last_name} </p>
+                                        </div>
+                                    </div>
+                                    <div className="review-section body">
+                                        <p className="base__Body02-sc-1tvbuqk-16 ewOEQO comment color--dark" style={{ textAlign: "left" }}>{c.content}</p>
+                                    </div>
+                                    <div className="review-section footer" style={{ marginTop: "0" }}>
+                                        <p className="base__Caption-sc-1tvbuqk-18 gJvXJw rated-date color--light-disable">Đăng ngày {c.created_date}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                )}
             </div>
         </Container >
     )
