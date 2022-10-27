@@ -51,7 +51,7 @@ function Detail() {
 
     useEffect(() => {
         const loadComments = async () => {
-            const res = await Api.get(endpoints['product-comments'](productId))
+            const res = await authAxios().get(endpoints['product-comments'](productId))
             setComments(res.data)
         }
         loadComments()
@@ -60,7 +60,7 @@ function Detail() {
     const addComment = async (evt) => {
         evt.preventDefault()
 
-        const resComment = await Api.post(endpoints['comments'], {
+        const resComment = await authAxios().post(endpoints['comments'], {
             content: content,
             product: productId,
             user: user.id,

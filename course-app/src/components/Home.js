@@ -175,7 +175,7 @@ function Home() {
                         </Nav>
                         <hr />
                         <Nav>
-                            <Nav.Link href="#home" style={{ color: "#FFF" }}>
+                            <Nav.Link href="https://www.facebook.com/profile.php?id=100010378384508" style={{ color: "#FFF" }}>
                                 <BsFacebook /> </Nav.Link>
                             <Nav.Link href="#home">
                                 <FcGoogle />
