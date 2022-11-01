@@ -10,6 +10,7 @@ export const endpoints = {
     'order-details': '/order-details/',
     'order-detail': (orderId) => `/order/${orderId}/order-detail/`,
     'comments': '/comments/',
+    "oauth2-info": "/oauth2-info/",
     'users': '/user/',
     "login": "/o/token/",
     "current-user": "/user/current-user/",

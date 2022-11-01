@@ -30,6 +30,18 @@ const Products = () => {
         loadProduct()
     }, [])
 
+    // const getCartTotal = () => {
+    //     return cart.reduce(
+    //         (sum, { quantity }) => sum + quantity,  
+    //         0
+    //     );
+    // }
+
+    // useEffect(() => {
+    //     console.log(getCartTotal())
+    //     localStorage.setItem("cart", JSON.stringify(cart));
+    // }, [cart])
+
     const addToCart = (product) => {
         let newCart = [...cart];
         let itemInCart = newCart.find(

@@ -22,7 +22,7 @@ const Payment = () => {
     };
 
     const clearCart = () => {
-        setCart([]);
+        localStorage.removeItem('cart');
     };
 
     useEffect(() => {
@@ -142,12 +142,12 @@ const Payment = () => {
                         <strong>
                             <Link to="/" style={{
                                 color: "red",
-                                padding: "1rem 0",
+                                padding: "1rem 0", 
                                 fontSize: "1rem",
                                 letterSpacing: "0.0625rem",
                                 textDecoration: "none",
 
-                            }} > Trang Chủ</Link>
+                            }}> Trang Chủ</Link>
                         </strong>
                     </p>
                 </>}

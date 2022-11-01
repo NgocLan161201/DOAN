@@ -12,6 +12,7 @@ const getItemFormLocalStorage = JSON.parse(localStorage.getItem("cart") || "[]")
 
 const Header = () => {
     const [kw, setKw] = useState()
+    const [cart, setCart] = useState(getItemFormLocalStorage)
     const [categories, setCategories] = useState([])
     const [user, dispatch] = useContext(UserContext)
 
@@ -32,15 +33,15 @@ const Header = () => {
     }, [])
 
     const getCartTotal = () => {
-        return getItemFormLocalStorage.reduce(
-            (sum, { quantity }) => sum + quantity,
+        return cart.reduce(
+            (sum, { quantity }) => sum + quantity,  
             0
         );
     }
 
-    useEffect (() => {
-        getCartTotal();
-    },[getItemFormLocalStorage])
+    useEffect(() => {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }, [cart])
 
 
     let btn = (

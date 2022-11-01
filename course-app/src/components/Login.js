@@ -17,29 +17,29 @@ const Login = () => {
         event.preventDefault()
 
         try {
-            const res = await Api.post(endpoints['login'], {
-                'client_id': '4SZzmOlZMf5uJ1Ym8DaHzJIdoiCjeFgUmI9ApmwN',
-                'client_secret': 'EnzhOjbt19JdlJaxLY4L5nMC6wcbHpQvqdeEXBxEBRw4cA6A8YVNKP9ATxOnWdKBLEAkxb2MhRbFo28xQvJu5qmMzt6due6MSrEtM2zlmxFp7huGWo3x4U7WFVdHJMqt',
-                'username': username,
-                'password': password,
-                'grant_type': 'password'
-            })
+            let info = await Api.get(endpoints["oauth2-info"]);
+            console.log(info)
 
+            let res = await Api.post(endpoints["login"], {
+                headers: "Access-Control-Allow-Origin: http://127.0.0.1:8000/",
+                client_id: info.data.client_id,
+                client_secret: info.data.client_secret,
+                username: username,
+                password: password,
+                grant_type: "password",
+            });
+            console.log(res)
 
-            if (res.status === 200) {
-                cookies.save('access_token', res.data.access_token)
+            cookies.save('access_token', res.data.access_token)
+            const user = await authAxios().get(endpoints["current-user"]);
+            cookies.save('current_user', user.data);
+            console.log(user.data)
 
-                // lay current user
-                const user = await authAxios().get(endpoints['current-user'])
-                console.log(user.data)
-                cookies.save('current_user', user.data)
-                dispatch({
-                    "type": "login",
-                    "payload": user.data
-                })
-            }
+            dispatch({
+                type: "login",
+                payload: user.data,
+            });
         } catch (error) {
-            console.info(error)
             setErr("Sai tài khoản hoặc mật khẩu !!!!");
         }
     }

@@ -17,6 +17,7 @@ const Cart = () => {
     };
 
     const clearCart = () => {
+        localStorage.removeItem('cart');
         setCart([]);
     };
 
